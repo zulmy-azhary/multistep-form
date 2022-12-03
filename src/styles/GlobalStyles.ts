@@ -17,6 +17,8 @@ export default createGlobalStyle`
 
     /* Breakpoints */
     --mobile: ${(props) => props.theme.media.mobile};
+    --tablet: ${(props) => props.theme.media.tablet};
+    --laptop: ${(props) => props.theme.media.laptop};
     --desktop: ${(props) => props.theme.media.desktop};
   }
 
@@ -27,9 +29,12 @@ export default createGlobalStyle`
   }
 
   body {
-    font-size: 5rem;
-    font-family: 'Ubuntu';
-    background: var(--alabaster);
+    font-family: 'Ubuntu', sans-serif;
+    background: var(--magnolia);
+  }
+
+  button {
+    font-family: "Ubuntu";
   }
 
   p {

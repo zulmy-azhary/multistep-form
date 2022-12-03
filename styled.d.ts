@@ -22,6 +22,8 @@ declare module "styled-components" {
     };
     media: {
       mobile: string;
+      tablet: string;
+      laptop: string;
       desktop: string;
     };
   }
