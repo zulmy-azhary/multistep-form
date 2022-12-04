@@ -2,9 +2,10 @@ import React from "react";
 import { FieldValues } from "react-hook-form/dist/types";
 import styled, { useTheme } from "styled-components";
 import { StepForm } from "./components";
-import { useFormCtx } from "./context";
 import { useMediaQuery, useStepForm } from "./hooks";
 import { AddOns, PersonalInfo, Plan, Summary } from "./pages";
+import { FormProvider, useForm } from "react-hook-form";
+import { FormData } from "./types";
 
 const Container = styled.form`
   width: 100%;
@@ -121,49 +122,63 @@ const Content = styled.div`
   }
 `;
 
+const defaultValues: FormData = {
+  name: "",
+  emailAddress: "",
+  phoneNumber: "",
+  option: "Arcade",
+  period: "Monthly",
+  addOns: [],
+}
+
 const App: React.FC = () => {
-  const { handleSubmit } = useFormCtx();
+  const methods = useForm<FormData>({
+    mode: "all",
+    defaultValues: defaultValues,
+  });
   const { media } = useTheme();
   const isTablet = useMediaQuery(`(min-width: ${media.tablet})`);
   const stepList = [<PersonalInfo />, <Plan />, <AddOns />, <Summary />];
   const { steps, step, backStep, nextStep, isFirstStep, isLastStep } = useStepForm(stepList);
 
-  const onSubmit = handleSubmit((data: FieldValues) => {
+  const onSubmit = methods.handleSubmit((data: FormData) => {
     console.log(data);
     nextStep();
   });
 
   return (
-    <Container onSubmit={onSubmit}>
-      <Wrapper>
-        {!isTablet && (
-          <Dots>
-            {steps &&
-              steps.map((_, idx: number) => {
-                const isActive = steps.indexOf(step) === idx;
+    <FormProvider {...methods}>
+      <Container onSubmit={onSubmit}>
+        <Wrapper>
+          {!isTablet && (
+            <Dots>
+              {steps &&
+                steps.map((_, idx: number) => {
+                  const isActive = steps.indexOf(step) === idx;
 
-                return (
-                  <Item key={idx} isActive={isActive}>
-                    {idx + 1}
-                  </Item>
-                );
-              })}
-          </Dots>
-        )}
-        <Card>
-          {isTablet && (
-            <Sidebar>
-              <Image src={"/images/bg-sidebar-desktop.svg"} />
-            </Sidebar>
+                  return (
+                    <Item key={idx} isActive={isActive}>
+                      {idx + 1}
+                    </Item>
+                  );
+                })}
+            </Dots>
           )}
-          <CardContent>
-            <Content>{step}</Content>
-            {isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
-          </CardContent>
-        </Card>
-      </Wrapper>
-      {!isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
-    </Container>
+          <Card>
+            {isTablet && (
+              <Sidebar>
+                <Image src={"/images/bg-sidebar-desktop.svg"} />
+              </Sidebar>
+            )}
+            <CardContent>
+              <Content>{step}</Content>
+              {isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
+            </CardContent>
+          </Card>
+        </Wrapper>
+        {!isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
+      </Container>
+    </FormProvider>
   );
 };
 

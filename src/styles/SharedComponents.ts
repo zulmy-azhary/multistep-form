@@ -19,4 +19,7 @@ export const SubHeader = styled.h3`
   line-height: 1.5rem;
 `;
 
-export const Text = styled.p``
+export const Text = styled.p`
+  color: var(--marineBlue);
+  font-weight: 500;
+`;
