@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -11,11 +11,15 @@ const Wrapper = styled.div`
   }
 `;
 
+const Head = styled.div``
+
 const Label = styled.label`
   color: var(--marineBlue);
   font-size: 0.875rem;
   font-weight: 500;
 `;
+
+const Error = styled.span``;
 
 const Input = styled.input`
   padding: 0.75rem;
@@ -33,15 +37,20 @@ interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
 }
 
-const InputForm: React.FC<InputFormProps> = (props) => {
+const InputForm: React.ForwardRefRenderFunction<HTMLDivElement, InputFormProps> = (props, ref) => {
   const { title, ...rest } = props;
 
   return (
-    <Wrapper>
-      <Label htmlFor={title}>{title}</Label>
+    <Wrapper ref={ref}>
+      <Head>
+        <Label htmlFor={title}>{title}</Label>
+        <Error>
+
+        </Error>
+      </Head>
       <Input id={title} {...rest} autoComplete="off" />
     </Wrapper>
   );
 };
 
-export default InputForm;
+export default forwardRef(InputForm);

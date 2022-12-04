@@ -1,8 +1,9 @@
 import React from "react";
+import { FieldValues } from "react-hook-form/dist/types";
 import styled, { useTheme } from "styled-components";
 import { StepForm } from "./components";
-import { useMediaQuery } from "./hooks/useMediaQuery";
-import { useStepForm } from "./hooks/useStepForm";
+import { useFormCtx } from "./context";
+import { useMediaQuery, useStepForm } from "./hooks";
 import { AddOns, PersonalInfo, Plan, Summary } from "./pages";
 
 const Container = styled.form`
@@ -48,10 +49,10 @@ const Dots = styled.div`
   column-gap: 1rem;
 `;
 
-const Item = styled.button`
+const Item = styled.div<{ isActive: boolean }>`
   --size: 2.25rem;
 
-  background: transparent;
+  background: ${({ isActive }) => (isActive ? "var(--lightBlue)" : " transparent")};
   width: var(--size);
   height: var(--size);
   display: flex;
@@ -59,14 +60,9 @@ const Item = styled.button`
   align-items: center;
   border-radius: 50%;
   border: 1px solid white;
-  color: white;
+  color: ${({ isActive }) => (isActive ? "black" : "white")};
   font-size: 0.875rem;
   font-weight: 500;
-
-  &:hover {
-    background-color: var(--lightBlue);
-    color: black;
-  }
 `;
 
 const Card = styled.div`
@@ -74,7 +70,7 @@ const Card = styled.div`
   max-width: 100%;
   height: fit-content;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
   padding: 2rem 1.5rem;
   display: flex;
@@ -107,10 +103,13 @@ const Image = styled.img`
 const CardContent = styled.div`
   width: 100%;
 
-  @media (min-width: ${(props) => props.theme.media.desktop}) {
+  @media (min-width: ${(props) => props.theme.media.tablet}) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  @media (min-width: ${(props) => props.theme.media.desktop}) {
     row-gap: 2rem;
     padding: 1rem 5rem;
   }
@@ -123,17 +122,16 @@ const Content = styled.div`
 `;
 
 const App: React.FC = () => {
+  const { handleSubmit } = useFormCtx();
   const { media } = useTheme();
   const isTablet = useMediaQuery(`(min-width: ${media.tablet})`);
-  // const { step, steps, goToStep } = useStep();
   const stepList = [<PersonalInfo />, <Plan />, <AddOns />, <Summary />];
-  const { steps, step, goToStep, backStep, nextStep, isFirstStep, isLastStep } =
-    useStepForm(stepList);
+  const { steps, step, backStep, nextStep, isFirstStep, isLastStep } = useStepForm(stepList);
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("submit");
-  };
+  const onSubmit = handleSubmit((data: FieldValues) => {
+    console.log(data);
+    nextStep();
+  });
 
   return (
     <Container onSubmit={onSubmit}>
@@ -141,11 +139,15 @@ const App: React.FC = () => {
         {!isTablet && (
           <Dots>
             {steps &&
-              steps.map((_, idx) => (
-                <Item type="button" onClick={() => goToStep(idx)} key={idx}>
-                  {idx + 1}
-                </Item>
-              ))}
+              steps.map((_, idx: number) => {
+                const isActive = steps.indexOf(step) === idx;
+
+                return (
+                  <Item key={idx} isActive={isActive}>
+                    {idx + 1}
+                  </Item>
+                );
+              })}
           </Dots>
         )}
         <Card>
@@ -156,25 +158,11 @@ const App: React.FC = () => {
           )}
           <CardContent>
             <Content>{step}</Content>
-            {isTablet && (
-              <StepForm
-                backStep={backStep}
-                nextStep={nextStep}
-                isFirstStep={isFirstStep}
-                isLastStep={isLastStep}
-              />
-            )}
+            {isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
           </CardContent>
         </Card>
       </Wrapper>
-      {!isTablet && (
-        <StepForm
-          backStep={backStep}
-          nextStep={nextStep}
-          isFirstStep={isFirstStep}
-          isLastStep={isLastStep}
-        />
-      )}
+      {!isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
     </Container>
   );
 };
