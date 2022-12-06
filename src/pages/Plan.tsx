@@ -3,13 +3,19 @@ import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import { PlanForm } from "../components";
 import { Header, Heading, SubHeader, Text } from "../styles/SharedComponents";
-import type { Period, Option } from "../types";
+import type { Period } from "../types";
 
 const ChoosePlan = styled.div`
   margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   row-gap: 0.75rem;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    flex-direction: row;
+    column-gap: 1rem;
+    justify-content: space-between;
+  }
 `;
 
 const PeriodWrapper = styled.div`
@@ -42,7 +48,7 @@ const Toggle = styled.div<{ checked: boolean }>`
   border-radius: 100px;
   position: relative;
 
-  :after {
+  &:after {
     content: "";
     position: absolute;
     left: ${(props) => (props.checked ? "calc(70% - 14%)" : "10%")};
@@ -68,7 +74,6 @@ const Plan: React.FC = () => {
       return result;
     });
   };
-  const [selected, setSelected] = useState<Option>(getValues("option"));
 
   return (
     <>
@@ -77,27 +82,9 @@ const Plan: React.FC = () => {
         <SubHeader>You have the option of monthly or yearly billing.</SubHeader>
       </Heading>
       <ChoosePlan>
-        <PlanForm
-          selected={selected}
-          setSelected={setSelected}
-          price={9}
-          isYearly={isYearly}
-          title="Arcade"
-        />
-        <PlanForm
-          selected={selected}
-          setSelected={setSelected}
-          price={12}
-          isYearly={isYearly}
-          title="Advanced"
-        />
-        <PlanForm
-          selected={selected}
-          setSelected={setSelected}
-          price={15}
-          isYearly={isYearly}
-          title="Pro"
-        />
+        <PlanForm isYearly={isYearly} option={{ name: "Arcade", price: 9 }} />
+        <PlanForm isYearly={isYearly} option={{ name: "Advanced", price: 12 }} />
+        <PlanForm isYearly={isYearly} option={{ name: "Pro", price: 15 }} />
       </ChoosePlan>
       <PeriodWrapper>
         <PeriodText isChecked={!isYearly}>Monthly</PeriodText>
@@ -107,7 +94,6 @@ const Plan: React.FC = () => {
             defaultValue={period}
             checked={isYearly}
             {...register("period")}
-            onChange={periodChange}
             aria-label="Period toggle"
           />
         </Toggle>

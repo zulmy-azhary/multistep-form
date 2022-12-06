@@ -1,27 +1,39 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import { Text } from "../styles/SharedComponents";
 import type { Option } from "../types";
 
-const Container = styled.div<{ isChecked: boolean }>`
+const Container = styled.button`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   column-gap: 1.25rem;
   padding: 1rem;
-  border: 1px solid var(--${(props) => (props.isChecked ? "purplishBlue" : "lightGray")});
+  border: 1px solid var(--lightGray);
   border-radius: 8px;
   cursor: pointer;
-  background-color: ${(props) => props.isChecked && "var(--alabaster)"};
+  background-color: transparent;
+
+  &:has(input[type="radio"]:checked) {
+    border-color: var(--purplishBlue);
+    background-color: var(--alabaster);
+  }
 
   &:hover {
     outline: 1px solid var(--purplishBlue);
   }
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    justify-content: space-between;
+    flex-direction: column;
+    flex: 1;
+    row-gap: 3rem;
+  }
 `;
 
 const Input = styled.input`
-  display: none;
+  /* display: none; */
 `;
 
 const Image = styled.img`
@@ -34,6 +46,10 @@ const PlanWrapper = styled.div`
   align-items: flex-start;
   flex-direction: column;
   row-gap: 0.5rem;
+
+  @media (min-width: ${(props) => props.theme.media.tablet}) {
+    align-self: flex-start;
+  }
 `;
 
 const PlanText = styled(Text)`
@@ -52,36 +68,25 @@ const Discount = styled(Text)`
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  title: Option;
   isYearly: boolean;
-  price: number;
-  selected: Option;
-  setSelected: React.Dispatch<React.SetStateAction<Option>>;
+  option: Option;
 }
 
 const PlanForm: React.FC<Props> = (props) => {
-  const { title, isYearly, price, selected, setSelected, ...rest } = props;
+  const { isYearly, option, ...rest } = props;
+  const { name, price } = option;
   const { register, setValue } = useFormContext();
-  const isChecked = selected === title;
 
-  const inputChange = useCallback(() => {
-    setSelected(title);
-    setValue("option", title);
-  }, []);
+  const inputChange = () => {
+    setValue("option", { name, price });
+  };
 
   return (
-    <Container isChecked={isChecked} onClick={inputChange}>
-      <Input
-        {...rest}
-        {...register("option")}
-        type="radio"
-        name="plan"
-        value={title}
-        onChange={inputChange}
-      />
-      <Image src={`/images/icon-${title.toLowerCase()}.svg`} alt={`${title} Icon`} />
+    <Container type="button" onClick={inputChange}>
+      <Input {...rest} {...register("option.name")} type="radio" value={name} />
+      <Image src={`/images/icon-${name.toLowerCase()}.svg`} alt={`${name} Icon`} />
       <PlanWrapper>
-        <PlanText>{title}</PlanText>
+        <PlanText>{name}</PlanText>
         <SubText>{isYearly ? `$${price * 10}/yr` : `$${price}/mo`}</SubText>
         {isYearly && <Discount>2 months free</Discount>}
       </PlanWrapper>

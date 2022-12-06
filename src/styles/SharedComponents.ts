@@ -23,3 +23,8 @@ export const Text = styled.p`
   color: var(--marineBlue);
   font-weight: 500;
 `;
+
+export const SubText = styled(Text)`
+  color: var(--coolGray);
+  font-size: 0.9rem;
+`;

@@ -4,7 +4,11 @@ export type PersonalInfo = {
   phoneNumber: string;
 };
 
-export type Option = "Arcade" | "Advanced" | "Pro";
+export type OptionName = "Arcade" | "Advanced" | "Pro";
+export type Option = {
+  name: OptionName;
+  price: number;
+};
 export type Period = "Monthly" | "Yearly";
 
 export type Plan = {
@@ -12,8 +16,14 @@ export type Plan = {
   period: Period;
 };
 
+export type AddOnsName = "Online service" | "Larger storage" | "Customizable profile";
+
 export type AddOns = {
-  addOns: ("Service" | "Storage" | "Customizable")[];
+  name: AddOnsName;
+  price: number;
 };
 
-export type FormData = PersonalInfo & Plan & AddOns;
+export type FormData = PersonalInfo &
+  Plan & {
+    addOns: AddOns[];
+  };

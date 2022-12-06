@@ -1,5 +1,4 @@
 import React from "react";
-import { FieldValues } from "react-hook-form/dist/types";
 import styled, { useTheme } from "styled-components";
 import { StepForm } from "./components";
 import { useMediaQuery, useStepForm } from "./hooks";
@@ -126,10 +125,10 @@ const defaultValues: FormData = {
   name: "",
   emailAddress: "",
   phoneNumber: "",
-  option: "Arcade",
+  option: { name: "Arcade", price: 9 },
   period: "Monthly",
   addOns: [],
-}
+};
 
 const App: React.FC = () => {
   const methods = useForm<FormData>({
@@ -138,12 +137,12 @@ const App: React.FC = () => {
   });
   const { media } = useTheme();
   const isTablet = useMediaQuery(`(min-width: ${media.tablet})`);
-  const stepList = [<PersonalInfo />, <Plan />, <AddOns />, <Summary />];
+  const stepList: JSX.Element[] = [<PersonalInfo />, <Plan />, <AddOns />, <Summary />];
   const { steps, step, backStep, nextStep, isFirstStep, isLastStep } = useStepForm(stepList);
 
   const onSubmit = methods.handleSubmit((data: FormData) => {
+    if (!isLastStep) return nextStep();
     console.log(data);
-    nextStep();
   });
 
   return (
