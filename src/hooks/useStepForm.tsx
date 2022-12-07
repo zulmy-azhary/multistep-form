@@ -4,7 +4,7 @@ export const useStepForm = (steps: React.ReactNode[]) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const step = steps[currentStep];
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 1;
+  const isLastStep = currentStep === steps.length - 2;
 
   // Go to previous step
   const backStep = () => {
@@ -13,7 +13,7 @@ export const useStepForm = (steps: React.ReactNode[]) => {
 
   // Go to next step
   const nextStep = () => {
-    setCurrentStep((curr) => (curr >= steps.length - 1 ? curr : curr + 1));
+    setCurrentStep((curr) => (curr >= steps.length - 2 ? curr : curr + 1));
   };
 
   // Go to specific step

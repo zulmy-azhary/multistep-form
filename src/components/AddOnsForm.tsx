@@ -21,6 +21,10 @@ const Wrapper = styled.button`
   &:hover {
     outline: 1px solid var(--purplishBlue);
   }
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    padding: 1.25rem 1.5rem;
+  }
 `;
 
 const CheckBox = styled.input`
@@ -28,6 +32,11 @@ const CheckBox = styled.input`
   transform: scale(1.25);
   accent-color: var(--purplishBlue);
   cursor: pointer;
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    width: 1.5rem;
+    transform: scale(1.5);
+  }
 `;
 
 const TextWrapper = styled.div`
@@ -37,22 +46,39 @@ const TextWrapper = styled.div`
   align-items: flex-start;
   flex: 1;
   padding-left: 0.75rem;
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    padding-left: 1.25rem;
+  }
 `;
 
 const AddOnsText = styled(Text)`
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.5;
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    font-size: 1.05rem;
+  }
 `;
 
 const Subtitle = styled(SubText)`
   font-size: 0.8rem;
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    font-size: 0.925rem;
+    font-weight: 400;
+  }
 `;
 
 const Discount = styled(Text)`
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--purplishBlue);
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    font-size: 0.9rem;
+  }
 `;
 
 interface AddOnsProps {

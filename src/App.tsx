@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { StepForm } from "./components";
 import { useMediaQuery, useStepForm } from "./hooks";
-import { AddOns, PersonalInfo, Plan, Summary } from "./pages";
+import { AddOns, PersonalInfo, Plan, Summary, ThankYou } from "./pages";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormData } from "./types";
+import { SubText } from "./styles/SharedComponents";
 
 const Container = styled.form`
   width: 100%;
@@ -47,6 +48,13 @@ const Dots = styled.div`
   justify-content: center;
   align-items: center;
   column-gap: 1rem;
+
+  @media (min-width: ${(props) => props.theme.media.tablet}) {
+    flex-direction: column;
+    row-gap: 2rem;
+    margin-top: 0;
+    align-items: flex-start;
+  }
 `;
 
 const Item = styled.div<{ isActive: boolean }>`
@@ -92,12 +100,50 @@ const Card = styled.div`
 `;
 const Sidebar = styled.div`
   position: relative;
+  /* width: 17.125rem;
+  min-height: 35.5rem; */
 `;
 
 const Image = styled.img`
   border-radius: 10px;
   width: fit-content;
   height: fit-content;
+`;
+
+const SidebarContent = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 2.5rem 2rem;
+`;
+
+const ItemWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  column-gap: 1.25rem;
+`;
+
+const ItemTextContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+`;
+
+const ItemSubText = styled(SubText)`
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 0.8rem;
+`;
+
+const ItemTitle = styled.h4`
+  color: var(--alabaster);
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
 `;
 
 const CardContent = styled.div`
@@ -137,11 +183,19 @@ const App: React.FC = () => {
   });
   const { media } = useTheme();
   const isTablet = useMediaQuery(`(min-width: ${media.tablet})`);
-  const stepList: JSX.Element[] = [<PersonalInfo />, <Plan />, <AddOns />, <Summary />];
-  const { steps, step, backStep, nextStep, isFirstStep, isLastStep } = useStepForm(stepList);
+  const [stepList] = useState<JSX.Element[]>([
+    <PersonalInfo />,
+    <Plan />,
+    <AddOns />,
+    <Summary />,
+    <ThankYou />,
+  ]);
+  const { steps, currentStep, step, backStep, nextStep, goToStep, isFirstStep, isLastStep } =
+    useStepForm(stepList);
 
   const onSubmit = methods.handleSubmit((data: FormData) => {
     if (!isLastStep) return nextStep();
+    goToStep(4);
     console.log(data);
   });
 
@@ -151,8 +205,10 @@ const App: React.FC = () => {
         <Wrapper>
           {!isTablet && (
             <Dots>
-              {steps.map((_, idx: number) => {
-                const isActive = steps.indexOf(step) === idx;
+              {stepsData.map((_, idx: number) => {
+                const curr = currentStep !== 4 ? steps.indexOf(step) : 4;
+                const i = currentStep !== 4 ? idx : idx + 1;
+                const isActive = curr === i;
 
                 return (
                   <Item key={idx} isActive={isActive}>
@@ -166,18 +222,41 @@ const App: React.FC = () => {
             {isTablet && (
               <Sidebar>
                 <Image src={"/images/bg-sidebar-desktop.svg"} />
+                <SidebarContent>
+                  <Dots>
+                    {stepsData.map((title, idx: number) => {
+                      const curr = currentStep !== 4 ? steps.indexOf(step) : 4;
+                      const i = currentStep !== 4 ? idx : idx + 1;
+                      const isActive = curr === i;
+
+                      return (
+                        <ItemWrapper key={idx}>
+                          <Item isActive={isActive}>{idx + 1}</Item>
+                          <ItemTextContent>
+                            <ItemSubText>Step {idx + 1}</ItemSubText>
+                            <ItemTitle>{title}</ItemTitle>
+                          </ItemTextContent>
+                        </ItemWrapper>
+                      );
+                    })}
+                  </Dots>
+                </SidebarContent>
               </Sidebar>
             )}
             <CardContent>
               <Content>{step}</Content>
-              {isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
+              {isTablet && (
+                <StepForm stepState={{ currentStep, backStep, isFirstStep, isLastStep }} />
+              )}
             </CardContent>
           </Card>
         </Wrapper>
-        {!isTablet && <StepForm stepState={{ backStep, isFirstStep, isLastStep }} />}
+        {!isTablet && <StepForm stepState={{ currentStep, backStep, isFirstStep, isLastStep }} />}
       </Container>
     </FormProvider>
   );
 };
+
+const stepsData: string[] = ["Your Info", "Select Plan", "Add-Ons", "Summary"];
 
 export default App;

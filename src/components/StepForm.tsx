@@ -55,6 +55,7 @@ const ButtonNext = styled(Button)<{ isLastStep: boolean }>`
 
 interface Props {
   stepState: {
+    currentStep: number;
     backStep: () => void;
     isFirstStep: boolean;
     isLastStep: boolean;
@@ -62,19 +63,23 @@ interface Props {
 }
 
 const StepForm: React.FC<Props> = ({ stepState }) => {
-  const { backStep, isFirstStep, isLastStep } = stepState;
+  const { currentStep, backStep, isFirstStep, isLastStep } = stepState;
   
   return (
-    <StepWrapper>
-      {!isFirstStep && (
-        <ButtonBack onClick={backStep} type="button">
-          Go Back
-        </ButtonBack>
+    <>
+      {currentStep !== 4 && (
+        <StepWrapper>
+          {!isFirstStep && (
+            <ButtonBack onClick={backStep} type="button">
+              Go Back
+            </ButtonBack>
+          )}
+          <ButtonNext type="submit" isLastStep={isLastStep}>
+            {isLastStep ? "Confirm" : "Next Step"}
+          </ButtonNext>
+        </StepWrapper>
       )}
-      <ButtonNext type="submit" isLastStep={isLastStep}>
-        {isLastStep ? "Confirm" : "Next Step"}
-      </ButtonNext>
-    </StepWrapper>
+    </>
   );
 };
 

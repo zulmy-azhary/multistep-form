@@ -34,7 +34,7 @@ const Container = styled.button`
 `;
 
 const Input = styled.input`
-  /* display: none; */
+  display: none;
 `;
 
 const Image = styled.img`
@@ -66,6 +66,10 @@ const SubText = styled(Text)`
 const Discount = styled(Text)`
   font-size: 0.75rem;
   font-weight: 500;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    font-size: 0.775rem;
+  }
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {

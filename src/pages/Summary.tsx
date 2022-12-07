@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Heading, Header, SubHeader, Text, SubText } from "../styles/SharedComponents";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
@@ -11,7 +11,10 @@ const Details = styled.div`
   margin-top: 1.5rem;
 `;
 
-const Total = styled.div``;
+const Total = styled.div`
+  margin-top: 1.25rem;
+  padding: 0 1rem;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,7 +29,9 @@ const PlanContent = styled.div``;
 
 const PlanText = styled(Text)``;
 
-const Change = styled(SubText)``;
+const Change = styled(SubText)`
+  text-decoration: underline;
+`;
 
 const Price = styled(Text)`
   font-size: 0.875rem;
@@ -44,16 +49,29 @@ const Info = styled.div`
   padding: 0.5rem 0;
 `;
 
-const AddOnsText = styled(SubText)``;
+const AddOnsText = styled(SubText)`
+  font-size: 0.925rem;
+  font-weight: 400;
+`;
 
 const AddOnsPrice = styled(Price)`
   font-weight: 500;
+`;
+const TotalText = styled(Price)`
+  color: var(--purplishBlue);
+  font-size: 1rem;
 `;
 
 const Summary: React.FC = () => {
   const { getValues } = useFormContext();
   const { period, option, addOns } = getValues();
   const { name, price }: Option = option;
+  const [total] = useState<number>(() => {
+    const sum = addOns.reduce((acc: number, { price }: { price: number }) => acc + price, 0);
+    const total = sum + price;
+
+    return total;
+  });
 
   return (
     <>
@@ -64,19 +82,23 @@ const Summary: React.FC = () => {
       <Details>
         <Wrapper>
           <PlanContent>
-            <PlanText>{name}</PlanText>
+            <PlanText>
+              {name} ({period})
+            </PlanText>
             <Change>Change</Change>
           </PlanContent>
           <Price>{totalPeriod(period, price)}</Price>
         </Wrapper>
         <AddOnsInfo>
           {!!addOns.length ? (
-            addOns.map((item: AddOns, idx: number) => (
-              <Info key={idx}>
-                <AddOnsText>{item.title}</AddOnsText>
-                <AddOnsPrice>+{totalPeriod(period, item.price)}</AddOnsPrice>
-              </Info>
-            ))
+            addOns.map((item: AddOns, idx: number) => {
+              return (
+                <Info key={idx}>
+                  <AddOnsText>{item.title}</AddOnsText>
+                  <AddOnsPrice>+{totalPeriod(period, item.price)}</AddOnsPrice>
+                </Info>
+              );
+            })
           ) : (
             <Info>
               <AddOnsText>No add-ons added.</AddOnsText>
@@ -84,7 +106,12 @@ const Summary: React.FC = () => {
           )}
         </AddOnsInfo>
       </Details>
-      <Total></Total>
+      <Total>
+        <Info>
+          <AddOnsText>Total (per {period === "Yearly" ? "year" : "month"})</AddOnsText>
+          <TotalText>+{totalPeriod(period, total)}</TotalText>
+        </Info>
+      </Total>
     </>
   );
 };

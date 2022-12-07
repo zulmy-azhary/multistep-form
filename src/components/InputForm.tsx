@@ -36,6 +36,7 @@ const Input = styled.input<{ isValid?: boolean }>`
   border-radius: 5px;
   outline: none;
   color: var(--marineBlue);
+  font-weight: 700;
 
   &:active,
   &:focus {
@@ -43,8 +44,13 @@ const Input = styled.input<{ isValid?: boolean }>`
   }
 
   &::placeholder {
-    font-weight: 700;
     color: var(--coolGray);
+  }
+
+  @media (min-width: ${props => props.theme.media.laptop}) {
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
   }
 `;
 

@@ -5,9 +5,9 @@ export const Heading = styled.div``;
 export const Header = styled.h1`
   color: var(--marineBlue);
   font-size: 1.5rem;
-  line-height: 2.75rem;
+  line-height: 3rem;
 
-  @media (min-width: ${props => props.theme.media.tablet}) {
+  @media (min-width: ${props => props.theme.media.laptop}) {
     font-size: revert;
   }
 `;
