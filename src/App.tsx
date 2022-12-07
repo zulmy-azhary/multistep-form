@@ -151,16 +151,15 @@ const App: React.FC = () => {
         <Wrapper>
           {!isTablet && (
             <Dots>
-              {steps &&
-                steps.map((_, idx: number) => {
-                  const isActive = steps.indexOf(step) === idx;
+              {steps.map((_, idx: number) => {
+                const isActive = steps.indexOf(step) === idx;
 
-                  return (
-                    <Item key={idx} isActive={isActive}>
-                      {idx + 1}
-                    </Item>
-                  );
-                })}
+                return (
+                  <Item key={idx} isActive={isActive}>
+                    {idx + 1}
+                  </Item>
+                );
+              })}
             </Dots>
           )}
           <Card>

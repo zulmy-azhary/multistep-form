@@ -1,20 +1,25 @@
-import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
+import { totalPeriod } from "../helper";
 import { SubText, Text } from "../styles/SharedComponents";
 import type { AddOns } from "../types";
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.875rem;
   border: 1px solid var(--lightGray);
   border-radius: 8px;
-  /* cursor: pointer; */
+  cursor: pointer;
+  background-color: transparent;
 
   &:has(input[type="checkbox"]:checked) {
     border-color: var(--purplishBlue);
+  }
+  &:hover {
+    outline: 1px solid var(--purplishBlue);
   }
 `;
 
@@ -51,33 +56,44 @@ const Discount = styled(Text)`
 `;
 
 interface AddOnsProps {
-  subtitle: string;
-  addOns: AddOns;
+  addOnsItem: AddOns & { subtitle: string };
 }
 
-const AddOnsForm: React.FC<AddOnsProps> = ({ addOns, subtitle }) => {
-  const { name, price } = addOns;
-  const { register, getValues, setValue, control } = useFormContext();
-  const { fields, replace } = useFieldArray({
-    control,
-    name: "addOns",
-  });
-  const isYearly = getValues("period") === "Yearly";
-  const discount = isYearly ? `+$${price * 10}/yr` : `+$${price}/mo`;
+const AddOnsForm: React.FC<AddOnsProps> = ({ addOnsItem }) => {
+  const { id, title, subtitle, price } = addOnsItem;
+  const { getValues, setValue, watch } = useFormContext();
+  const { addOns, period } = getValues();
+  const [isChecked, setChecked] = useState<boolean>(
+    !!addOns.filter((i: AddOns) => i.title === title).length
+  );
 
-  const clickHandler = () => {
-    // replace([{ name, price }]);
-    setValue("addOns", { name, price });
+  const changeHandler = () => {
+    watch("addOns");
+    const addOnsData: AddOns[] = !isChecked
+      ? addOns.includes(title)
+        ? addOns
+        : [...addOns, { id, title, price }]
+      : addOns.filter((item: AddOns) => item.title !== title);
+
+    const sortArray = addOnsData.sort((a, b) => a.id - b.id);
+    setValue("addOns", sortArray);
+    setChecked((prev) => !prev);
   };
 
   return (
-    <Wrapper onClick={clickHandler}>
-      <CheckBox type="checkbox" value={name} {...register("addOns")} />
+    <Wrapper type="button">
+      <CheckBox
+        onChange={changeHandler}
+        name={title}
+        type="checkbox"
+        value={title}
+        checked={isChecked}
+      />
       <TextWrapper>
-        <AddOnsText>{name}</AddOnsText>
+        <AddOnsText>{title}</AddOnsText>
         <Subtitle>{subtitle}</Subtitle>
       </TextWrapper>
-      <Discount>{discount}</Discount>
+      <Discount>+{totalPeriod(period, price)}</Discount>
     </Wrapper>
   );
 };

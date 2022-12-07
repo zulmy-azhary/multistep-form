@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
+import { totalPeriod } from "../helper";
 import { Text } from "../styles/SharedComponents";
 import type { Option } from "../types";
 
@@ -68,14 +69,14 @@ const Discount = styled(Text)`
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  isYearly: boolean;
   option: Option;
 }
 
 const PlanForm: React.FC<Props> = (props) => {
-  const { isYearly, option, ...rest } = props;
+  const { option, ...rest } = props;
   const { name, price } = option;
-  const { register, setValue } = useFormContext();
+  const { register, setValue, getValues } = useFormContext();
+  const { period } = getValues();
 
   const inputChange = () => {
     setValue("option", { name, price });
@@ -87,8 +88,8 @@ const PlanForm: React.FC<Props> = (props) => {
       <Image src={`/images/icon-${name.toLowerCase()}.svg`} alt={`${name} Icon`} />
       <PlanWrapper>
         <PlanText>{name}</PlanText>
-        <SubText>{isYearly ? `$${price * 10}/yr` : `$${price}/mo`}</SubText>
-        {isYearly && <Discount>2 months free</Discount>}
+        <SubText>{totalPeriod(period, price)}</SubText>
+        {period === "Yearly" && <Discount>2 months free</Discount>}
       </PlanWrapper>
     </Container>
   );

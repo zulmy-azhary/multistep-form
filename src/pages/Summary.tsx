@@ -2,11 +2,13 @@ import React from "react";
 import { Heading, Header, SubHeader, Text, SubText } from "../styles/SharedComponents";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
-import type { Option } from "../types";
+import type { AddOns, Option } from "../types";
+import { totalPeriod } from "../helper";
 
 const Details = styled.div`
   background-color: var(--alabaster);
   padding: 1rem;
+  margin-top: 1.5rem;
 `;
 
 const Total = styled.div``;
@@ -50,10 +52,8 @@ const AddOnsPrice = styled(Price)`
 
 const Summary: React.FC = () => {
   const { getValues } = useFormContext();
-  const { period, option } = getValues();
+  const { period, option, addOns } = getValues();
   const { name, price }: Option = option;
-  const isYearly = period === "Yearly";
-  const discount = isYearly ? `+$${price * 10}/yr` : `+$${price}/mo`;
 
   return (
     <>
@@ -67,17 +67,21 @@ const Summary: React.FC = () => {
             <PlanText>{name}</PlanText>
             <Change>Change</Change>
           </PlanContent>
-          <Price>{discount}</Price>
+          <Price>{totalPeriod(period, price)}</Price>
         </Wrapper>
         <AddOnsInfo>
-          <Info>
-            <AddOnsText>Online service</AddOnsText>
-            <AddOnsPrice>+$1/mo</AddOnsPrice>
-          </Info>
-          <Info>
-            <AddOnsText>Online service</AddOnsText>
-            <AddOnsPrice>+$1/mo</AddOnsPrice>
-          </Info>
+          {!!addOns.length ? (
+            addOns.map((item: AddOns, idx: number) => (
+              <Info key={idx}>
+                <AddOnsText>{item.title}</AddOnsText>
+                <AddOnsPrice>+{totalPeriod(period, item.price)}</AddOnsPrice>
+              </Info>
+            ))
+          ) : (
+            <Info>
+              <AddOnsText>No add-ons added.</AddOnsText>
+            </Info>
+          )}
         </AddOnsInfo>
       </Details>
       <Total></Total>

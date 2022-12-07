@@ -82,9 +82,9 @@ const Plan: React.FC = () => {
         <SubHeader>You have the option of monthly or yearly billing.</SubHeader>
       </Heading>
       <ChoosePlan>
-        <PlanForm isYearly={isYearly} option={{ name: "Arcade", price: 9 }} />
-        <PlanForm isYearly={isYearly} option={{ name: "Advanced", price: 12 }} />
-        <PlanForm isYearly={isYearly} option={{ name: "Pro", price: 15 }} />
+        <PlanForm option={{ name: "Arcade", price: 9 }} />
+        <PlanForm option={{ name: "Advanced", price: 12 }} />
+        <PlanForm option={{ name: "Pro", price: 15 }} />
       </ChoosePlan>
       <PeriodWrapper>
         <PeriodText isChecked={!isYearly}>Monthly</PeriodText>

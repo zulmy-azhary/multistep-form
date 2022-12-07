@@ -19,7 +19,8 @@ export type Plan = {
 export type AddOnsName = "Online service" | "Larger storage" | "Customizable profile";
 
 export type AddOns = {
-  name: AddOnsName;
+  id: number;
+  title: AddOnsName;
   price: number;
 };
 
