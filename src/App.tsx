@@ -219,7 +219,7 @@ const App: React.FC = () => {
           <Card>
             {isTablet && (
               <Sidebar>
-                <Image src={"/images/bg-sidebar-desktop.svg"} />
+                <Image src={"/images/bg-sidebar-desktop.svg"} alt="Sidebar Image" />
                 <SidebarContent>
                   <Dots>
                     {stepsData.map((title, idx: number) => {

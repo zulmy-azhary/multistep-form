@@ -12,7 +12,7 @@ export const Header = styled.h1`
   }
 `;
 
-export const SubHeader = styled.h3`
+export const SubHeader = styled.h2`
   color: var(--coolGray);
   font-weight: 400;
   font-size: 1rem;

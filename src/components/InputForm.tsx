@@ -72,13 +72,13 @@ const InputForm: React.ForwardRefRenderFunction<HTMLInputElement, InputFormProps
   return (
     <Wrapper>
       <Upper>
-        <Label htmlFor={title}>{title}</Label>
+        <Label htmlFor={inputName}>{title}</Label>
         {!!errorMsg && <Error>{`${errorMsg}`}</Error>}
       </Upper>
       <Input
         {...rest}
         ref={forwardedRef}
-        id={title}
+        id={inputName}
         autoComplete="off"
         onChange={(e) => setValue(inputName, e.target.value)}
         isValid={!errorMsg}
