@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
@@ -25,14 +25,14 @@ const Label = styled.label`
 `;
 
 const Error = styled.span`
-  color: red;
+  color: var(--strawberryRed);
   font-size: 0.75rem;
   font-weight: 500;
 `;
 
 const Input = styled.input<{ isValid?: boolean }>`
   padding: 0.75rem;
-  border: 1px solid var(--lightGray);
+  border: 1px solid var(--${(props) => (props.isValid ? "lightGray" : "strawberryRed")});
   border-radius: 5px;
   outline: none;
   color: var(--marineBlue);
@@ -47,39 +47,44 @@ const Input = styled.input<{ isValid?: boolean }>`
     color: var(--coolGray);
   }
 
-  @media (min-width: ${props => props.theme.media.laptop}) {
-    padding: 1rem;
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     font-size: 0.95rem;
+    line-height: 2rem;
   }
 `;
 
 interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string;
-  name: string;
+  inputName: string;
 }
 
-const InputForm: React.FC<InputFormProps> = (props) => {
-  const { title, name, ...rest } = props;
-  const { setValue, formState, register } = useFormContext();
-  const { errors, isValid } = formState;
+const InputForm: React.ForwardRefRenderFunction<HTMLInputElement, InputFormProps> = (
+  props,
+  forwardedRef
+) => {
+  const { title, inputName, ...rest } = props;
+  const { setValue, formState } = useFormContext();
+  const { errors } = formState;
+  const errorMsg = errors[inputName]?.message;
 
   return (
     <Wrapper>
       <Upper>
         <Label htmlFor={title}>{title}</Label>
-        {/* <Error>Required.</Error> */}
+        {!!errorMsg && <Error>{`${errorMsg}`}</Error>}
       </Upper>
       <Input
+        {...rest}
+        ref={forwardedRef}
         id={title}
         autoComplete="off"
-        {...register(name, { required: `${title} is required.` })}
-        {...rest}
-        onChange={(e) => setValue(name, e.target.value)}
-        isValid={isValid}
+        onChange={(e) => setValue(inputName, e.target.value)}
+        isValid={!errorMsg}
       />
     </Wrapper>
   );
 };
 
-export default InputForm;
+export default forwardRef(InputForm);

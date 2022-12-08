@@ -100,8 +100,6 @@ const Card = styled.div`
 `;
 const Sidebar = styled.div`
   position: relative;
-  /* width: 17.125rem;
-  min-height: 35.5rem; */
 `;
 
 const Image = styled.img`

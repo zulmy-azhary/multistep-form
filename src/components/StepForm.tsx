@@ -64,7 +64,7 @@ interface Props {
 
 const StepForm: React.FC<Props> = ({ stepState }) => {
   const { currentStep, backStep, isFirstStep, isLastStep } = stepState;
-  
+
   return (
     <>
       {currentStep !== 4 && (

@@ -15,6 +15,7 @@ const ChoosePlan = styled.div`
     flex-direction: row;
     column-gap: 1rem;
     justify-content: space-between;
+    margin-top: 2.5rem;
   }
 `;
 
@@ -29,6 +30,10 @@ const PeriodWrapper = styled.div`
   align-items: center;
   column-gap: 1.25rem;
   padding: 1.5rem 0;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    margin-top: 2rem;
+  }
 `;
 
 const PeriodText = styled(Text)<{ isChecked: boolean }>`

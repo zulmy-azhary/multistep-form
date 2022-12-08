@@ -8,6 +8,11 @@ const AddOnsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 0.875rem;
+  margin-top: 1.5rem;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    margin-top: 2.5rem;
+  }
 `;
 
 const AddOns: React.FC = () => {

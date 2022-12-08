@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Heading, Header, SubHeader, Text, SubText } from "../styles/SharedComponents";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
@@ -9,11 +9,20 @@ const Details = styled.div`
   background-color: var(--alabaster);
   padding: 1rem;
   margin-top: 1.5rem;
+  border-radius: 5px;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    margin-top: 2.5rem;
+    padding: 1rem 1.5rem;
+  }
 `;
 
 const Total = styled.div`
   margin-top: 1.25rem;
   padding: 0 1rem;
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    padding: 0 1.5rem;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -27,15 +36,28 @@ const Wrapper = styled.div`
 
 const PlanContent = styled.div``;
 
-const PlanText = styled(Text)``;
+const PlanText = styled(Text)`
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    font-size: 1.05rem;
+  }
+`;
 
 const Change = styled(SubText)`
   text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--purplishBlue);
+  }
 `;
 
 const Price = styled(Text)`
   font-size: 0.875rem;
   font-weight: 700;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    font-size: 1.05rem;
+  }
 `;
 
 const AddOnsInfo = styled.div`
@@ -56,10 +78,18 @@ const AddOnsText = styled(SubText)`
 
 const AddOnsPrice = styled(Price)`
   font-weight: 500;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    font-size: 0.875rem;
+  }
 `;
 const TotalText = styled(Price)`
   color: var(--purplishBlue);
   font-size: 1rem;
+
+  @media (min-width: ${(props) => props.theme.media.laptop}) {
+    font-size: 1.25rem;
+  }
 `;
 
 const Summary: React.FC = () => {
@@ -85,7 +115,7 @@ const Summary: React.FC = () => {
             <PlanText>
               {name} ({period})
             </PlanText>
-            <Change>Change</Change>
+            <Change as="a">Change</Change>
           </PlanContent>
           <Price>{totalPeriod(period, price)}</Price>
         </Wrapper>
