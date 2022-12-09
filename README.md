@@ -33,7 +33,7 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![Design preview for the Multi-step form coding challenge](./design/desktop-preview.jpg)
 
 Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
 
@@ -45,8 +45,8 @@ Then crop/optimize/edit your image however you like, add it to your project, and
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [Click here](https://www.frontendmentor.io/solutions/multistep-form-aCNmjGRWxB)
+- Live Site URL: [Click here](https://react-multistepform.vercel.app/)
 
 ## My process
 
@@ -101,9 +101,9 @@ Use this section to outline areas that you want to continue focusing on in futur
 
 ## Author
 
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
+- Website - [Zulmy Azhary](https://zulmy-azhary.vercel.app/)
+- Frontend Mentor - [@zulmy-azhary](https://www.frontendmentor.io/profile/zulmy-azhary)
+- Github - [@zulmy-azhary](https://github.com/zulmy-azhary)
 
 **Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
 
